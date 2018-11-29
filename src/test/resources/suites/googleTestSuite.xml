@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Test Google" verbose="1">
+    <suite-files>
+        <suite-file path="googleTestSuite.xml"/>
+    </suite-files>
+    <test name="GoogleTest">
+        <classes>
+            <class name="google.tests.GoogleMailTest" />
+        </classes>
+    </test>
+</suite>
