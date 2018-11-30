@@ -3,13 +3,10 @@ package google.tests;
 import framework.utils.Logger;
 import framework.utils.PropertyReader;
 import framework.webdriver.BaseEntity;
-import google.enums.MessageOptionsActNumber;
-import google.pages.MainMailPage;
-import google.pages.MessagePage;
-import google.pages.PasswordSignInPage;
-import google.pages.LoginSignInPage;
-import google.pages.forms.NewMessageForm;
-import google.pages.forms.SentMessageStatusForm;
+import google.Entities.Message;
+import google.enums.*;
+import google.pages.*;
+import google.pages.forms.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -17,8 +14,7 @@ import org.testng.asserts.SoftAssert;
 public class GoogleMailTest extends BaseEntity {
 
     private static PropertyReader credentialsProperty = new PropertyReader("credentials.properties");
-    private String messageSubject = "Test message";
-    private String messageBody = "Hello!";
+    private Message message = new Message(credentialsProperty.getProperty("username"),"Test message", "Hello!");
     private SoftAssert softAssert = new SoftAssert();
 
     @Test
@@ -31,32 +27,33 @@ public class GoogleMailTest extends BaseEntity {
         PasswordSignInPage passwordSignInPage = new PasswordSignInPage();
         passwordSignInPage.setPassword(credentialsProperty.getProperty("password"));
 
-        Logger.logStep(3,"OPENING MAIL PAGE AND VERIFY IS SUCH PAGE OPENED...");
+        Logger.logStep(3,"OPENING MAIL PAGE AND VERIFY IF SUCH PAGE OPENED...");
         MainMailPage mainMailPage = new MainMailPage();
-        Assert.assertEquals(credentialsProperty.getProperty("username"),mainMailPage.getCurrentEmailAddress(),"Mail of necessary user has not opened");
+        Assert.assertEquals(credentialsProperty.getProperty("username"),mainMailPage.getCurrentEmailAddress()
+                ,"EMail of necessary user has not opened");
 
-        Logger.logStep(3,"WRITING NEW MESSAGE...");
+        Logger.logStep(4,"WRITING NEW MESSAGE...");
         mainMailPage.clickWriteMessageButton();
         NewMessageForm newMessageForm = new NewMessageForm();
-        newMessageForm.writeNewMessage(credentialsProperty.getProperty("username"),messageSubject,messageBody);
+        newMessageForm.writeNewMessage(message.getRecipientEmail(),message.getSubject(),message.getBody());
 
-        Logger.logStep(3,"VERIFYING THAT MESSAGE WAS DELIVERED SUCCESSFULLY...");
+        Logger.logStep(5,"VERIFYING THAT MESSAGE WAS DELIVERED SUCCESSFULLY...");
         SentMessageStatusForm sentMessageStatusForm = new SentMessageStatusForm();
         sentMessageStatusForm.openSendingMessage();
         MessagePage messagePage = new MessagePage();
+        softAssert.assertEquals(message.getRecipientEmail(),messagePage.getMessageRecipientEmail()
+                ,"Email is not correct");
+        softAssert.assertEquals(message.getSubject(),messagePage.getMessageSubject(),"Subject is not correct");
+        softAssert.assertEquals(message.getBody(),messagePage.getMessageBody(),"Body is not correct");
 
-      //  System.out.println("!!!!" + messagePage.getMessageRecipientEmail());
-       // System.out.println("!!!!" + messagePage.getMessageSubject());
-      //  System.out.println("!!!!" + messagePage.getMessageBody());
-        Assert.assertEquals(credentialsProperty.getProperty("username"),messagePage.getMessageRecipientEmail(),"");
-        Assert.assertEquals("Test message",messagePage.getMessageSubject());
-        Assert.assertEquals("Hello!",messagePage.getMessageBody());
-       // softAssert.assertAll();
+        Logger.logStep(6,"DELETING SENDING MESSAGE...");
+        messagePage.mailNavigateMenu.clickMenuItem(NavigateMenuHrefPart.INBOX.getHrefPart());
+        mainMailPage.selectMessage(message.getRecipientEmail(),message.getSubject(),message.getBody());
+        mainMailPage.messageOptionsMenu.clickMenuItem(MessageOptionsActNumber.DELETE.getAttributeName());
 
-        Logger.logStep(4,"DELETING SENDING MESSAGE...");
-        messagePage.messageOptionsMenu.clickMenuItem(MessageOptionsActNumber.DELETE.getAttributeName());
-
-        Logger.logStep(3,"VERIFYING THAT MESSAGE WAS DELETED SUCCESSFULLY...");
-        Assert.assertFalse(mainMailPage.isMessageExist(credentialsProperty.getProperty("username"),messageSubject,messageBody),"Message has not deleted");
+        Logger.logStep(7,"VERIFYING THAT MESSAGE WAS DELETED SUCCESSFULLY...");
+        Assert.assertFalse(mainMailPage.isMessageExist(message.getRecipientEmail(),message.getSubject()
+                ,message.getBody()),"Message has not deleted");
+        softAssert.assertAll();
     }
 }

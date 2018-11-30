@@ -2,11 +2,9 @@ package google.pages;
 
 import framework.utils.RegExpFinder;
 import framework.webdriver.BaseForm;
-import framework.webdriver.elements.Button;
-import framework.webdriver.elements.CheckBox;
-import framework.webdriver.elements.Label;
-import google.enums.Attribute;
-import google.enums.RegExp;
+import framework.webdriver.elements.*;
+import google.enums.*;
+import google.pages.menu.MessageOptionsMenu;
 import org.openqa.selenium.By;
 
 public class MainMailPage extends BaseForm {
@@ -15,13 +13,11 @@ public class MainMailPage extends BaseForm {
     private final Button btnWriteMessage =  new Button(By.xpath("//div[contains(@class,'aic')]//div[@role='button']"),"Write Message Button");
     private final Button btnUserAccountInfo =  new Button(By.xpath("//a[contains(@href,'SignOut')]"),"User Account Info Button");
     private final Label lblMessagesList =  new Label(By.xpath("//div[@class='UI']//tr"),"Message Label");
-    private final Button btnDeleteMessage =  new Button(By.xpath("//div[@act='10']//div"),"Delete Selected Messages Button");
-    private final Button btnLook =  new Button(By.xpath("//span[@id='link_vsm']"),"Delete Selected Messages Button");
-    private final static String FormatMessageSelectLocator = "(//div[@class='UI']//div[@role='checkbox'])[%s]";
-    private final static String FormatMessageEmailLocator = "(//span[@class='bA4']//span)[%s]";
-    private final static String FormatMessageSubjectLocator = "(//span[@class='bog']//span)[%s]";
-    private final static String FormatMessageBodyLocator = "(//span[@class='y2'])[%s]";
-
+    private final static String FormatMessageSelectLocator = "(//div[contains(@class,'UI')]//div[@role='checkbox'])[%s]";
+    private final static String FormatMessageEmailLocator = "(//span[contains(@class,'bA4')]//span)[%s]";
+    private final static String FormatMessageSubjectLocator = "(//span[contains(@class,'bog')]//span)[%s]";
+    private final static String FormatMessageBodyLocator = "(//span[contains(@class,'y2')])[%s]";
+    public MessageOptionsMenu messageOptionsMenu = new MessageOptionsMenu();
 
     public MainMailPage() {
         super(By.xpath(MAIN_LOCATOR),"Main User Mail Page");
@@ -39,7 +35,7 @@ public class MainMailPage extends BaseForm {
     public boolean isMessageExist(String recipientEmail, String subject, String body) {
         boolean bool = false;
         if (lblMessagesList.isPresent()) {
-            for (int i = 1; i <= lblMessagesList.getCurrentElementCount(); i++) {
+            for (int i = 1; i <= lblMessagesList.getSuchElementsCount(); i++) {
                 if (getMessageRecipientEmail(i).equals(recipientEmail)
                 && getMessageSubject(i).equals(subject)
                 && getMessageBody(i).equals(body)) {
@@ -50,14 +46,13 @@ public class MainMailPage extends BaseForm {
         return bool;
     }
 
-    public void deleteMessage(String recipientEmail, String subject, String body){
+    public void selectMessage(String recipientEmail, String subject, String body){
         if (lblMessagesList.isPresent()) {
-            for (int i = 1; i <= lblMessagesList.getCurrentElementCount(); i++) {
+            for (int i = 1; i <= lblMessagesList.getSuchElementsCount(); i++) {
                 if (getMessageRecipientEmail(i).equals(recipientEmail)
                         && getMessageSubject(i).equals(subject)
                         && getMessageBody(i).equals(body)) {
                     selectMessage(i);
-                    btnDeleteMessage.click();
                 }
             }
         }

@@ -2,7 +2,6 @@ package framework.webdriver;
 
 import framework.webdriver.elements.Label;
 import org.openqa.selenium.By;
-
 import static org.testng.Assert.assertTrue;
 
 public class BaseForm extends BaseEntity{

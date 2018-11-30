@@ -1,2 +1,2 @@
 Тесты можно запустить командой: 
-mvn clean test -Dsuite=tutByTestSuite.xml
+mvn clean test -Dsuite=googleTestSuite.xml

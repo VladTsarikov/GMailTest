@@ -12,7 +12,7 @@ public class LoginSignInPage extends BaseForm {
     private final Button btnNext =  new Button(By.id("identifierNext"),"Next Button");
 
     public LoginSignInPage() {
-        super(By.id(MAIN_LOCATOR),"Sign In Page");
+        super(By.id(MAIN_LOCATOR),"Login Sign In Page");
     }
 
     public void setLogin(String login){

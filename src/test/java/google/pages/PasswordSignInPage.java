@@ -12,11 +12,11 @@ public class PasswordSignInPage extends BaseForm {
     private final Button btnNext =  new Button(By.id("passwordNext"),"Next Button");
 
     public PasswordSignInPage() {
-        super(By.id(MAIN_LOCATOR),"Set Password Sign In Page");
+        super(By.id(MAIN_LOCATOR),"Password Sign In Page");
     }
 
     public void setPassword(String password){
         txbPassword.setText(password);
-        btnNext.click();
+        btnNext.clickViaJS();
     }
 }

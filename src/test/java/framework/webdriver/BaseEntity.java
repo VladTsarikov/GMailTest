@@ -9,9 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BaseEntity {
 
-    private static PropertyReader propertyReader = new PropertyReader("config.properties");
-    private static String url = propertyReader.getProperty("url");
-    private static int wait = Integer.parseInt(propertyReader.getProperty("wait"));
+    private static PropertyReader seleniumProperty = new PropertyReader("selenium.properties");
     protected static WebDriver driver;
 
     @BeforeClass
@@ -19,8 +17,9 @@ public class BaseEntity {
         Logger.log("Starting tests...");
         driver = BrowserFactory.getDriver();
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(wait, TimeUnit.SECONDS);
-        driver.get(url);
+        driver.manage().timeouts().implicitlyWait(Integer.parseInt(seleniumProperty
+                .getProperty("defaultConditionTimeout")), TimeUnit.SECONDS);
+        driver.get(seleniumProperty.getProperty("url"));
     }
 
     @AfterClass

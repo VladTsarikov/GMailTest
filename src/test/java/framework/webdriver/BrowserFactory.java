@@ -11,15 +11,16 @@ import java.util.Map;
 public class BrowserFactory {
 
     private static WebDriver driver;
-    private static PropertyReader driversProperty = new PropertyReader("drivers.properties");
-    private final static String OPERATING_SYSTEM = driversProperty.getProperty("operating_system");
-    private final static String CHROME_PROPERTY = driversProperty.getProperty("chrome_property");
-    private final static String FIREFOX_PROPERTY = driversProperty.getProperty("firefox_property");
-    private final static String DRIVER_PATH = driversProperty.getProperty("driver_path");
-    private final static String CHROME_DRIVER_NAME = driversProperty.getProperty("chrome_driver_name");
-    private final static String FIREFOX_DRIVER_NAME = driversProperty.getProperty("firefox_driver_name");
-    private final static String WINDOWS_DRIVER_EXT = driversProperty.getProperty("windows_driver_extension");
-    private final static String LINUX_DRIVER_EXT = driversProperty.getProperty("linux_driver_extension");
+    private static PropertyReader seleniumProperty = new PropertyReader("selenium.properties");
+    private final static String OPERATING_SYSTEM = seleniumProperty.getProperty("operating_system");
+    private final static String CHROME_PROPERTY = seleniumProperty.getProperty("chrome_property");
+    private final static String FIREFOX_PROPERTY = seleniumProperty.getProperty("firefox_property");
+    private final static String DRIVER_PATH = seleniumProperty.getProperty("driver_path");
+    private final static String CHROME_DRIVER_NAME = seleniumProperty.getProperty("chrome_driver_name");
+    private final static String FIREFOX_DRIVER_NAME = seleniumProperty.getProperty("firefox_driver_name");
+    private final static String WINDOWS_DRIVER_EXT = seleniumProperty.getProperty("windows_driver_extension");
+    private final static String LINUX_DRIVER_EXT = seleniumProperty.getProperty("linux_driver_extension");
+    private final static String DEFAULT_CONDITION_TIMEOUT = seleniumProperty.getProperty("defaultConditionTimeout");
 
     private BrowserFactory() { }
 
@@ -46,7 +47,7 @@ public class BrowserFactory {
      *
      */
     private static WebDriver switchBrowser(String extension){
-        switch (driversProperty.getProperty("browser")) {
+        switch (seleniumProperty.getProperty("browser")) {
             case "chrome":
                 setSystemProperty(CHROME_DRIVER_NAME,extension,CHROME_PROPERTY);
                 driver = new ChromeDriver(getChromeCapabilities());
@@ -84,5 +85,9 @@ public class BrowserFactory {
         ChromeOptions options = new ChromeOptions();
         options.setExperimentalOption("prefs", preferences);
         return options;
+    }
+
+    public static String getDefaultConditionTimeout() {
+        return DEFAULT_CONDITION_TIMEOUT;
     }
 }
