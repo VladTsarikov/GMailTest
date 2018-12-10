@@ -10,34 +10,20 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class Waiting {
 
-    public static <T> T waitFor(ExpectedCondition<T> condition) {
-        return waitFor(condition, Long.parseLong("15"));
+    public static void waitFor(ExpectedCondition condition) {
+        waitFor(condition, Long.parseLong(BrowserFactory.getDefaultConditionTimeout()));
     }
 
-    /**
-     * Wait for some object from condition with timeout. Wait until it's not false or null.
-     * @param condition Condition for waiting {@link ExpectedCondition}
-     * @param timeOutInSeconds Timeout in seconds
-     * @param <T> Object for waiting
-     * @return Object from condition
-     */
-    public static <T> T waitFor(ExpectedCondition<T> condition, long timeOutInSeconds) {
+    private static void waitFor(ExpectedCondition condition, long timeOutInSeconds) {
         int duration = 300;
-        long implicitTimeOut = 0L;
-        BrowserFactory.getDriver().manage().timeouts().implicitlyWait(implicitTimeOut, TimeUnit.MILLISECONDS);
         Wait<WebDriver> wait = new FluentWait<>((WebDriver) BrowserFactory.getDriver())
                 .withTimeout(timeOutInSeconds, SECONDS)
                 .pollingEvery(duration, TimeUnit.MILLISECONDS);
-
         try {
-            return wait.until(condition);
-        } catch (Exception | AssertionError e) {
+            wait.until(condition);
+        } catch (Exception e) {
             Logger.log(LogType.DEBUG, e);
-        } finally {
-            BrowserFactory.getDriver().manage().timeouts().implicitlyWait(Long.parseLong(BrowserFactory
-                    .getDefaultConditionTimeout()), SECONDS);
         }
-        return null;
     }
 
     public static void waitForPageIsReady(){

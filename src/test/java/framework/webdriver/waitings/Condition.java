@@ -58,11 +58,6 @@ class Condition {
                         .toString().equals("complete");
             }
         };
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return jsLoad;
     }
 }

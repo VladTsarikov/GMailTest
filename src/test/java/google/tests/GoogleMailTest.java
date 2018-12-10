@@ -18,7 +18,7 @@ public class GoogleMailTest extends BaseEntity {
     private SoftAssert softAssert = new SoftAssert();
 
     @Test
-    public void tutByTest(){
+    public void googleTest(){
         Logger.logStep(1,"OPENING GMAIL.COM AND ENTERING LOGIN...");
         LoginSignInPage loginSignInPage = new LoginSignInPage();
         loginSignInPage.setLogin(credentialsProperty.getProperty("username"));

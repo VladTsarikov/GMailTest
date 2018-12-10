@@ -10,7 +10,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <suite>tutByTestSuite.xml</suite>
+        <suite>googleTestSuite.xml</suite>
     </properties>
     <dependencies>
         <dependency>
@@ -50,6 +50,20 @@
                 <exclusion>
                     <groupId>com.sun.jmx</groupId>
                     <artifactId>jmxri</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.uncommons</groupId>
+            <artifactId>reportng</artifactId>
+            <version>1.7.9-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/test/resources/dependencies/reportng-1.7.9.jar</systemPath>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.testng</groupId>
+                    <artifactId>testng</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
